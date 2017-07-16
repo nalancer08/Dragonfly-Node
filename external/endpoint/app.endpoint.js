@@ -32,25 +32,3 @@ EndpointApp.prototype.status = function(request, response, obj) {
 }
 
 module.exports = EndpointApp;
-
-// class EndpointApp {
-
-// 	// EndpointApp.prototype.init(server) {
-// 	// 	console.log("COntructor works!!");
-// 	// 	server.addRoute('*', '/hello', EndpointApp.someMethod);
-// 	// }
-
-// 	constructor(server) {
-// 	    server.addRoute('*', '/hello', EndpointApp.someMethod);
-// 	  }
-
-//     static someMethod () {
-//         console.log('Hola mundo ERICK :D');
-//     }
-
-//     static anotherMethod () {
-//         console.log('Doing anotherMethod');
-//     }
-// }
-
-// module.exports = EndpointApp;
