@@ -5,7 +5,7 @@
 //  \__,_/_/   \__,_/\__, /\____/_/ /_/_/ /_/\__, /
 //                  /____/                  /____/
 
-// framwork
+// Framwork
 exports.Request  = require('./framework/request.js');
 exports.Response = require('./framework/response.js');
 exports.Server = require('./framework/server.js');
@@ -35,5 +35,5 @@ endpoints['app'] = new exports.EndpointApp(server);
 
 // Exports
 module.exports = {
-  endpoints, client
+  endpoints, client, server
 };

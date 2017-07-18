@@ -2,14 +2,9 @@
 	Created by: nalancer08 <https://github.com/nalancer08>
 	Revision: 1.0
 **/
-
-var client = require('../../index').client;
-
 function EndpointApp(server) {
 
-	var obj = this,
-		server = server;
-
+	var obj = this;
 	server.addRoute('*', '/hello/:id', this.someMethod);
 	server.addRoute('*', '/status', this.status);
 	server.addRoute('post', '/response/new', this.addResponse);
@@ -19,8 +14,11 @@ function EndpointApp(server) {
 
 EndpointApp.prototype.someMethod = function(request, response, obj) {
 
-	var ret = { status: 500, message: "Error", data: [] };
-
+	var obj = this,
+		server = require('../../index').server,
+		client = require('../../index').client,
+		ret = { status: 500, message: "Error", data: [] };
+	
 	response.setHeader('Content-Type', 'application/json, charset=utf-8');
 	response.setBody(JSON.stringify(ret));
 	response.respond();
@@ -29,13 +27,12 @@ EndpointApp.prototype.someMethod = function(request, response, obj) {
 
 EndpointApp.prototype.status = function(request, response, obj) {
 
-	var ret = { status: 200, message: "Success", data: "Everything works!" };
+	var obj = this,
+		server = require('../../index').server,
+		client = require('../../index').client,
+		ret = { status: 200, message: "Success", data: "Everything works!" },
+		query = 'SELECT * FROM response;';
 
-	var cassandra = require('cassandra-driver');
-	const authProvider = new cassandra.auth.PlainTextAuthProvider('cassandra', 'qctCyRz2');
-    var client = new cassandra.Client({ contactPoints: ['104.154.220.78'], keyspace: 'api_managment', authProvider: authProvider });
-    
-    var query = 'SELECT * FROM response;';
     client.execute(query, function(err, result){
 
 		if (!err) {
@@ -46,15 +43,14 @@ EndpointApp.prototype.status = function(request, response, obj) {
 			response.respond();
 		}
 
-	});
-
-    
+	}); 
     //return true;
 }
 
 EndpointApp.prototype.addResponse = function(request, response, obj) {
 
 	var obj = this,
+		server = require('../../index').server,
 		client = require('../../index').client,
 		ret = { status: 500, message: "Error" };
 
