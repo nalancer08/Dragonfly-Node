@@ -13,11 +13,27 @@ exports.Server = require('./framework/server.js');
 // Endpoints
 exports.EndpointApp = require('./external/endpoint/app.endpoint.js');
 
+// Cassandra driver
+const cassandra = require('cassandra-driver');
 
+// Cassandra conecction
+const authProvider = new cassandra.auth.PlainTextAuthProvider('cassandra', 'qctCyRz2');
+const client = new cassandra.Client({ 
+	contactPoints: ['104.154.220.78'],
+	keyspace: 'api_managment',
+	authProvider: authProvider
+});
+client.connect(() => {});
+
+// Creating server
 const server = new exports.Server;
 server.start();
 
+// Adding endpoints
 const endpoints = [];
 endpoints['app'] = new exports.EndpointApp(server);
 
-
+// Exports
+module.exports = {
+  endpoints, client
+};
