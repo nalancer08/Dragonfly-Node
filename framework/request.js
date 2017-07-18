@@ -46,11 +46,14 @@ Request.prototype.init = function(req, options) {
 	obj.id = obj.parts[1];
 
 	// Get output format (if specified)
+	//if (obj.id && obj.id != undefined && obj.id !== 'undefined') {
 	var matches = obj.id.match(/\.([a-z0-9]+)$/);
 	if (matches) {
-		obj.format = matches[1] || 'html';
-		obj.id = obj.id.replace(/\.([a-z0-9]+)$/, '');
+			obj.format = matches[1] || 'html';
+			obj.id = obj.id.replace(/\.([a-z0-9]+)$/, '');
 	}
+	//}
+
 	// Stream request body
 	req.on('data', function(chunk) {
 		body += chunk.toString();

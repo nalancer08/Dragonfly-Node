@@ -55,6 +55,7 @@ Response.prototype.getHeader = function(name) {
 Response.prototype.respond = function() {
 
 	var obj = this;
+	this.setHeader('Access-Control-Allow-Origin', '*');
 
 	_.each(obj.headers, function(header) {
 		obj.res.setHeader(header.name, header.value);

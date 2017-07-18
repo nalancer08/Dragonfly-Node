@@ -97,38 +97,36 @@ Server.prototype.removeRoute = function(method, route) {
 Server.prototype.onRequest = function(req, res) {
 
 	var obj = this;
+	var isMatch = false;
 	var response = new Response(res);
 	var request = new Request(req, {
 		onDataReceived: function() {
+
 			// Try with the routes for the current method (get or post)
 			_.each(obj.routes[request.type], function(route) {
 				if ( request.path.match(route.regexp) ) {
+					isMatch = true;
 					handled = route.handler.call(obj, request, response);
 				}
 			});
 			// If not handled yet, try with the wildcard ones
-			if (! handled ) {
+			if (!handled) {
 				_.each(obj.routes["*"], function(route) {
 					// console.log(route);
 					if ( request.path.match(route.regexp) ) {
+						isMatch = true;
 						handled = route.handler.call(obj, request, response);
 					}
 				});
 			}
 			// Not handled? Well, at this point we call it 404
-			if (! handled ) {
+			if (!handled && isMatch == false ) {
 				obj.onNotFound(request, response);
-			} // else {
-			// 	response.setBody(handled);
-			// }
-
-			// Profit!
-			if (response.autoRespond) {
-				response.respond();
 			}
 		}
 	}),
 	handled = false;
+	isMatch = false;
 }
 
 Server.prototype.onNotFound = function(request, response) {
