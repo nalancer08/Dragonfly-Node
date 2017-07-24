@@ -1,139 +1,117 @@
 /**
 	Created by: nalancer08 <https://github.com/nalancer08>
-	Revision: 1.0
+	Revision: 1.5
 **/
+
 function EndpointApp(server) {
 
 	var obj = this;
-	server.addRoute('*', '/hello/:id', this.someMethod);
-	//server.addRoute('*', '/status', this.status);
-	server.addRoute('get', '/status', this.status);
-	server.addRoute('post', '/response/new', this.addResponse);
-	server.addRoute('*', '/abais/watson/personality', this.watsonPersonality);
-
-	server.setDefaultRoute('/status');
-}
-
-EndpointApp.prototype.someMethod = function(request, response, obj) {
-
-	var obj = this,
-		server = require('../../index').server,
-		client = require('../../index').client,
-		ret = { status: 500, message: "Error", data: [] };
 	
-	response.setHeader('Content-Type', 'application/json, charset=utf-8');
-	response.setBody(JSON.stringify(ret));
-	response.respond();
-	return true;
+	/* Simple routes */
+	server.addRoute('*', '/status', this.status);
+	server.addRoute('get', '/testGet', this.test_uno);
+	server.addRoute('post', '/testPost', this.test_dos);
+
+	/* Rest parameters routes */
+	server.addRoute('get', '/demo/:id', this.demo_uno);
+	server.addRoute('post', '/path/:id', this.demo_dos);
+
+	/* Set the default route, in case to recive / in URL */
+	server.setDefaultRoute('/status');
 }
 
 EndpointApp.prototype.status = function(request, response, obj) {
 
 	var obj = this,
 		server = require('../../index').server,
-		client = require('../../index').client,
-		ret = { status: 200, message: "Success", data: "Everything works!" },
-		query = 'SELECT * FROM response;';
+		ret = { status: 200, message: "Success", data: "Everything works!" };
 
-    client.execute(query, function(err, result){
+	/* Your logic here */
 
-		if (!err) {
+	ret.data = "Hello world";
 
-			ret.data = result.rows;
-			response.setHeader('Content-Type', 'application/json, charset=utf-8');
-			response.setBody(JSON.stringify(ret));
-			response.respond();
-		}
-
-	}); 
-    //return true;
+	response.setHeader('Content-Type', 'application/json, charset=utf-8');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
 }
 
-EndpointApp.prototype.addResponse = function(request, response, obj) {
+EndpointApp.prototype.test_uno = function(request, response, obj) {
 
 	var obj = this,
 		server = require('../../index').server,
-		client = require('../../index').client,
-		ret = { status: 500, message: "Error" };
+		ret = { status: 500, message: "Error", data: [] };
 
+	/* Your logic here */
+	
+	ret.status = 200;
+	ret.message = 'Works fine!';
+
+	response.setHeader('Content-Type', 'application/json, charset=utf-8');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
+}
+
+EndpointApp.prototype.test_dos = function(request, response, obj) {
+
+	var obj = this,
+		server = require('../../index').server,
+		ret = { status: 500, message: "Error", data: [] };
+
+	// Getting POST variables
 	var params = request.params.post,
-		user_id = params.user_id,
-		app_id = params.app_id,
-		request_ip = params.request_ip,
-		route = params.route,
-		size = params.size,
-		key_slug = params.key_slug,
-		created = params.created,
-		modified = params.modified; 
+		name = params.name;
+	
+	ret.status = 200;
+	ret.message = 'Works fine!';
+	ret.data = name;
 
-	var query_params = [];
-	for (var param in params) {
-	    query_params.push(params[param]);
-	}
-
-	var query = "INSERT INTO api_managment.response " + 
-		"(id, user_id, app_id, request_ip, route, size, key_slug, created, modified) " +
-		"values (now(), ?, ?, ?, ?, ?, ?, toTimestamp(now()), toTimestamp(now()));";
-
-	// var query = "INSERT INTO api_managment.response " + 
-	// 	"(id, user_id, app_id, request_ip, route, size, key_slug, created, modified) " +
-	// 	"values (now(), 3, 1, '192.168.1.13', '/tasks', 1024, 'web', toTimestamp(now()), toTimestamp(now()));";
-
-	client.execute(query, query_params, { prepare: true }, function(err, result){
-
-		if (!err) {
-
-			ret.status = 200;
-			ret.message = "Success";
-			ret.data = result.rows ? result.rows : result;
-			response.setHeader('Content-Type', 'application/json, charset=utf-8');
-			response.setBody(JSON.stringify(ret));
-			response.respond();
-		
-		} else {
-
-			console.log(err);
-			response.setStatus(500);
-			response.respond();
-		}
-	});
+	response.setHeader('Content-Type', 'application/json, charset=utf-8');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
 }
 
-EndpointApp.prototype.watsonPersonality = function(request, response, obj) {
+EndpointApp.prototype.demo_uno = function(request, response, obj) {
 
 	var obj = this,
-		server = require('../../index').server,
-		fs  = require("fs"),
-		path = require('path'),
-		personality_text = fs.readFileSync(path.join(__dirname, '../data/', 'personality.txt')).toString(),
-		ret = { status: 500, message: 'Error', data: '' };
+	server = require('../../index').server,
+	ret = { status: 500, message: "Error", data: [] };
 
-	//console.log(personality_text);
+	// Getting the id that comes from url as a rest variable
+	var id = request.id;
 
-	var PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
-	var personality = new PersonalityInsightsV3({
+	ret.status = 200;
+	ret.message = 'Works fine!';
+	ret.data = 'Passed param is: ' + id;
 
-		username: '4d1ccde3-c042-4df9-9149-ef2d7522daeb',
-		password: 'qrSoyhwmFdVK',
-		version_date: '2016-10-19'
-	});
+	response.setHeader('Content-Type', 'application/json, charset=utf-8');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
+}
 
-	personality.profile({
+EndpointApp.prototype.demo_dos = function(request, response, obj) {
 
-		text: personality_text,
-		consumption_preferences: true
-	},
-	function(err, resp) {
-		if (err)
-			console.log('error:', err);
-		else
-			ret.status = 200;
-			ret.message = 'Success';
-			ret.data = resp;
-			response.setHeader('Content-Type', 'application/json, charset=utf-8');
-			response.setBody(JSON.stringify(ret));
-			response.respond();
-	});
+	var obj = this,
+	server = require('../../index').server,
+	ret = { status: 500, message: "Error", data: [] },
+	get = request.params.get,
+	post = request.params.post;
+
+	// Getting the id that comes from url as a rest variable
+	var id = request.id;
+
+	// Getting GET variables
+	var token = get.token;
+
+	// Getting POST variables
+	var name = post.name;
+
+	ret.status = 200;
+	ret.message = 'Works fine!';
+	ret.data = 'Passed param is =  ' + id + ' with token = ' + token + ' with this name = ' + name;
+
+	response.setHeader('Content-Type', 'application/json, charset=utf-8');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
 }
 
 module.exports = EndpointApp;

@@ -4,6 +4,11 @@
 //  / /_/ / /  / /_/ / /_/ / /_/ / / / / __/ / /_/ /
 //  \__,_/_/   \__,_/\__, /\____/_/ /_/_/ /_/\__, /
 //                  /____/                  /____/
+//
+// Created by: biohzrd <https://github.com/biohzrd>
+// Revised && updated: nalancer08 <https://github.com/nalancer08>
+// Version 1.5
+// Dragonfly Node Hyper
 
 // Framwork
 exports.Request  = require('./framework/request.js');
@@ -12,18 +17,6 @@ exports.Server = require('./framework/server.js');
 
 // Endpoints
 exports.EndpointApp = require('./external/endpoint/app.endpoint.js');
-
-// Cassandra driver
-const cassandra = require('cassandra-driver');
-
-// Cassandra conecction
-const authProvider = new cassandra.auth.PlainTextAuthProvider('cassandra', 'qctCyRz2');
-const client = new cassandra.Client({ 
-	contactPoints: ['104.154.220.78'],
-	keyspace: 'api_managment',
-	authProvider: authProvider
-});
-client.connect(() => {});
 
 // Creating server
 const server = new exports.Server;
