@@ -1,0 +1,29 @@
+{
+  "name": "dragonfly",
+  "version": "1.0.0",
+  "description": "APIs everywhere! Now with 100% more Node.js",
+  "homepage": "https://github.com/biohzrdmx/dragonfly-node",
+  "keywords": [
+    "server",
+    "api"
+  ],
+  "author": "biohzrdmx <http://github.com/biohzrdmx>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/biohzrdmx/dragonfly-node.git"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "underscore": ">= 1.6.x",
+    "cassandra-driver": "^3.1.4",
+    "watson-developer-cloud": "^2.34.0"
+  },
+  "scripts": {},
+  "license": "MIT",
+  "files": [
+    "lib/request.js",
+    "lib/response.js",
+    "lib/server.js",
+    "index.js"
+  ]
+}
