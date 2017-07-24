@@ -6,8 +6,10 @@ function EndpointApp(server) {
 
 	var obj = this;
 	server.addRoute('*', '/hello/:id', this.someMethod);
-	server.addRoute('*', '/status', this.status);
+	server.addRoute('*', '/demo', this.demo);
+	server.addRoute('get', '/status', this.status);
 	server.addRoute('post', '/response/new', this.addResponse);
+	server.addRoute('post', '/responses/', this.responses);
 
 	//server.setDefaultRoute('/status');
 }
@@ -25,7 +27,7 @@ EndpointApp.prototype.someMethod = function(request, response, obj) {
 	return true;
 }
 
-EndpointApp.prototype.status = function(request, response, obj) {
+EndpointApp.prototype.demo = function(request, response, obj) {
 
 	var obj = this,
 		server = require('../../index').server,
@@ -45,6 +47,20 @@ EndpointApp.prototype.status = function(request, response, obj) {
 
 	}); 
     //return true;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+EndpointApp.prototype.status = function(request, response, obj) {
+
+	var obj = this,
+		server = require('../../index').server,
+		client = require('../../index').client,
+		ret = { status: 200, message: "success", data: "" };
+
+	response.setHeader('Content-Type', 'application/json, charset=utf-8');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
 }
 
 EndpointApp.prototype.addResponse = function(request, response, obj) {
@@ -95,6 +111,19 @@ EndpointApp.prototype.addResponse = function(request, response, obj) {
 			response.respond();
 		}
 	});
+}
+
+EndpointApp.prototype.responses = function(request, response, obj) {
+
+	// Get the all the responses filtering by
+	/*
+		- user_id: Filter by all the routes/load of user id
+		- app_id: Filter all the routes/load of a app_id
+		- route: Filter for routes the load
+		- ip: Filter all the routes/load by ip
+		- date: Filter all the routes/load by date
+		- size: Filter all the routes/load by size
+	*/
 }
 
 module.exports = EndpointApp;
