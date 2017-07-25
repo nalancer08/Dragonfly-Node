@@ -18,8 +18,17 @@
 	- Fixed 404 or don't found response
 
 - Version 1.4
-	- Request fixed to hanlde not exists routes
+	- Request fixed to handle not exists routes
 	- Request fixed to handle '/' route
 
 - Version 1.5
 	- Can set default route in '/'
+
+- Version 1.6
+	- Can set config
+		- site_url
+		- base_url
+		- port
+	- The routes are automatic config with base_url option
+	- addRoute have to have updated to manage base_url option
+	- getDefaultRoute have to have updated to manage base_url option
