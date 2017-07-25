@@ -1,8 +1,8 @@
 /**
-	Version 1.5
+	Version 1.6
 	Created by: biohzrd <https://github.com/biohzrd>
 	Revised by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 24/07/2017
+	Last revision: 25/07/2017
 **/
 
 var _ = require('underscore');

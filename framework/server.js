@@ -1,8 +1,8 @@
 /**
-	Version 1.5
+	Version 1.6
 	Created by: biohzrd <https://github.com/biohzrd>
 	Revised by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 24/07/2017
+	Last revision: 25/07/2017
 **/
 
 var _ = require('underscore');
@@ -31,8 +31,10 @@ Server.prototype.init = function(options) {
 	var obj = this
 		opts = options || {};
 	_.defaults(opts, {
+		base_url: '',
 		onNotFound: obj.onNotFound
 	});
+	obj.options = opts;
 	// Create the base HTTP server and bind the request handler
 	obj.http = http.createServer(function(req, res) {
 		// LOG
@@ -45,14 +47,15 @@ Server.prototype.init = function(options) {
 	obj.onNotFound = opts.onNotFound;
 }
 
-Server.prototype.start = function(port) {
+Server.prototype.start = function() {
 
-	var obj = this,
-		port = port || 8080;
+	var obj = this;
+	var port = (obj.options.port && obj.options.port != '') ? obj.options.port : 8080;
 	// Listen on the specified port
 	obj.http.listen(port);
 	obj.log('Dragonfly Hyper server started');
-	obj.log(' > Listening on port ' + port);
+	obj.log(' > Listening on ' + obj.options.site_url + ':' + obj.options.port + obj.options.base_url);
+	//obj.log(' > Listening on port ' + port);
 }
 
 Server.prototype.log = function(value) {
@@ -84,10 +87,11 @@ Server.prototype.addRoute = function(method, route, handler, insert) {
 	var obj = this,
 		insert = insert || false,
 		method = method.toLowerCase(),
+		prev = (obj.options.base_url && obj.options.base_url != '' && obj.options.base_url != '/') ? obj.options.base_url : '',
 		instance = {
-			regexp: obj.routeToRegExp(route),
-			handler: handler
-		};
+		regexp: obj.routeToRegExp(prev + route),
+		handler: handler
+	};
 	// Add the route, may be at the beginning or at the end
 	if (insert) { // Adding the route at the beginning of the route's array
 		obj.routes[method].unshift(instance);
@@ -156,8 +160,10 @@ Server.prototype.setDefaultRoute = function(route) {
 
 Server.prototype.getDefaultRoute = function() {
 
-	var obj = this;
-	return obj.defaultRoute;
+	var obj = this,
+		prev = (obj.options.base_url && obj.options.base_url != '' && obj.options.base_url != '/') ? obj.options.base_url : '';
+
+	return (prev + obj.defaultRoute);
 }
 
 module.exports = Server;
