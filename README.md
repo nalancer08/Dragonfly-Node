@@ -1,5 +1,5 @@
 # Dragonfly-Node-Hyper
- Dragonfly Node Hyper it's a framework to build APIS with NodeJS so simple, it's a incoplete project of biohzrd user, so we decided to taken and rematered
+ Dragonfly Node Hyper it's a framework to build APIS with NodeJS so simple, it's a incoplete project of biohzrd user, so we decided to taken and remastered
 
 
 ## Change Log
