@@ -32,7 +32,6 @@ const settings = {
 		'pass_salt': '',
 		'token_salt': ''
 	}
-
 };
 
 module.exports = {

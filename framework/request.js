@@ -91,7 +91,13 @@ Request.prototype.init = function(req, options) {
 	});
 }
 
+/**
+* This method try to get a parameter from GET OR POST global parameters
+* @param name: Name of the parameter
+* @param value: Default value if the parameter is missing
+**/
 Request.prototype.param = function(name, value) {
+
 	var obj = this,
 		ret = value || '';
 	// Try to retrieve parameter from both, POST and GET objects
@@ -104,6 +110,7 @@ Request.prototype.param = function(name, value) {
 }
 
 Request.prototype.post = function(name, value) {
+
 	var obj = this,
 		ret = value || '';
 	// Try to retrieve parameter from POST object
@@ -114,6 +121,7 @@ Request.prototype.post = function(name, value) {
 }
 
 Request.prototype.get = function(name, value) {
+
 	var obj = this,
 		ret = value || '';
 	// Try to retrieve parameter from GET object
