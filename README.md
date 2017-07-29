@@ -32,3 +32,7 @@
 	- The routes are automatic config with base_url option
 	- addRoute have to have updated to manage base_url option
 	- getDefaultRoute have to have updated to manage base_url option
+
+- Version 1.6.1
+	- Fixed the way to get parameters from request
+		- Used with request class
