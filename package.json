@@ -14,9 +14,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "underscore": ">= 1.6.x",
-    "cassandra-driver": "^3.1.4",
-    "watson-developer-cloud": "^2.34.0"
+    "underscore": ">= 1.6.x"
   },
   "scripts": {},
   "license": "MIT",
