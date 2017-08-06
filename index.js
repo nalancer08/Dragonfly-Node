@@ -18,12 +18,13 @@ exports.Server = require('./framework/server.js');
 // Config
 const profile = require('./framework/config.js').profile;
 const settings = require('./framework/config.js').settings;
+const shared = settings['shared'];
 
 // Endpoints
 exports.EndpointApp = require('./external/endpoint/app.endpoint.js');
 
 // Creating server
-const server = new exports.Server(settings[profile]);
+const server = new exports.Server(settings[profile], shared);
 server.start();
 
 // Adding endpoints

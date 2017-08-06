@@ -36,3 +36,11 @@
 - Version 1.6.1
 	- Fixed the way to get parameters from request
 		- Used with request class
+
+- Version 1.7
+	- Added hash method for:
+		- token
+		- password
+	- Added extra configuration into config file for:
+		- passsword salt
+		- token salt

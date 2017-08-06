@@ -8,11 +8,12 @@
 var _ = require('underscore');
 var http = require('http');
 var url = require('url') ;
+var crypto = require('crypto');
 
 var Request  = require('./request.js');
 var Response = require('./response.js');
 
-function Server(options) {
+function Server(options, shared) {
 
 	this.http = null;
 	this.verbose = true;
@@ -23,18 +24,27 @@ function Server(options) {
 	},
 	this.defaultRoute = '';
 	// Call initialization callback
-	this.init(options);
+	this.init(options, shared);
 }
 
-Server.prototype.init = function(options) {
+Server.prototype.init = function(options, shared) {
 
 	var obj = this
-		opts = options || {};
+		opts = options || {},
+		security = shared || {};
+
 	_.defaults(opts, {
 		base_url: '',
 		onNotFound: obj.onNotFound
 	});
 	obj.options = opts;
+
+	_.defaults(security, {
+		pass_salt: '1234567890',
+		token_salt: '0987654321'
+	});
+	obj.security = security;
+
 	// Create the base HTTP server and bind the request handler
 	obj.http = http.createServer(function(req, res) {
 		// LOG
@@ -164,6 +174,31 @@ Server.prototype.getDefaultRoute = function() {
 		prev = (obj.options.base_url && obj.options.base_url != '' && obj.options.base_url != '/') ? obj.options.base_url : '';
 
 	return (prev + obj.defaultRoute);
+}
+
+Server.prototype.hashToken = function(value) {
+
+	var obj = this,
+		security = obj.security;
+
+	return crypto.createHash('md5').update(security.token_salt + value).digest('hex');
+}
+
+Server.prototype.hashPassword = function(value) {
+
+	var obj = this,
+		security = obj.security;
+
+	return crypto.createHash('md5').update(security.pass_salt).digest('hex');
+}
+
+Server.prototype.validateToken = function(token, value) {
+
+	var obj = this,
+		security = obj.security,
+		check = obj.hashToken(value);
+			
+	return (token == check);
 }
 
 module.exports = Server;
