@@ -38,9 +38,15 @@
 		- Used with request class
 
 - Version 1.7
-	- Added hash method for:
+	- Added MD5 hash methods for:
 		- token
 		- password
 	- Added extra configuration into config file for:
 		- passsword salt
 		- token salt
+
+- Version 1.7.5
+	- Added SHA-512 hash methods for:
+		- token
+		- password
+	- Fixed MD5 hashed methods

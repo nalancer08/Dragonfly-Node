@@ -184,12 +184,28 @@ Server.prototype.hashToken = function(value) {
 	return crypto.createHash('md5').update(security.token_salt + value).digest('hex');
 }
 
+Server.prototype.shaToken = function(value) {
+
+	var obj = this,
+		security = obj.security;
+
+	return crypto.createHash('sha512').update(security.token_salt + value).digest('hex');
+}
+
 Server.prototype.hashPassword = function(value) {
 
 	var obj = this,
 		security = obj.security;
 
-	return crypto.createHash('md5').update(security.pass_salt).digest('hex');
+	return crypto.createHash('md5').update(security.pass_salt + value).digest('hex');
+}
+
+Server.prototype.shaPassword = function(value) {
+
+	var obj = this,
+		security = obj.security;
+
+	return crypto.createHash('sha512').update(security.pass_salt + value).digest('hex');
 }
 
 Server.prototype.validateToken = function(token, value) {
@@ -198,6 +214,15 @@ Server.prototype.validateToken = function(token, value) {
 		security = obj.security,
 		check = obj.hashToken(value);
 			
+	return (token == check);
+}
+
+Server.prototype.validateShaToken = function(token, value) {
+
+	var obj = this,
+		security = obj.security,
+		check = obj.shaToken(value);
+
 	return (token == check);
 }
 
