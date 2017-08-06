@@ -14,11 +14,15 @@
 exports.Request  = require('./framework/request.js');
 exports.Response = require('./framework/response.js');
 exports.Server = require('./framework/server.js');
+exports.Authentication = require('./framework/authentication.js');
 
 // Config
 const profile = require('./framework/config.js').profile;
 const settings = require('./framework/config.js').settings;
 const shared = settings['shared'];
+
+// Authentication
+const authentication = new exports.Authentication();
 
 // Endpoints
 exports.EndpointApp = require('./external/endpoint/app.endpoint.js');
@@ -33,5 +37,5 @@ endpoints['app'] = new exports.EndpointApp(server);
 
 // Exports
 module.exports = {
-  server, endpoints
+  server, authentication ,endpoints
 };

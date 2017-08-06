@@ -24,15 +24,24 @@ EndpointApp.prototype.status = function(request, response, obj) {
 
 	var obj = this,
 		server = require('../../index').server,
+		authentication = require('../../index').authentication,
 		ret = { status: 200, message: "Success", data: "Everything works!" };
 
+	token = authentication.generateToken('be72d1a7d3f0b1c52d95089056f202fe');
+	console.log(token);
+
+	check = authentication.checkToken('be72d1a7d3f0b1c52d95089056f202fe', '7ab76f494cf1fd3dbda6152333a70bcc19e4dd04c6aa7df3b67cab4e22dd7dab.be72d1a7d3f0b1c52d95089056f202fe');
+	console.log(check);
 	/* Your logic here */
 
-	ret.data = "Hello world!";
+	if (authentication.requireToken(request, response)) {
 
-	response.setHeader('Content-Type', 'application/json');
-	response.setBody(JSON.stringify(ret));
-	response.respond();
+		ret.data = "Hello world!";
+
+		response.setHeader('Content-Type', 'application/json');
+		response.setBody(JSON.stringify(ret));
+		response.respond();
+	}
 }
 
 EndpointApp.prototype.test_uno = function(request, response, obj) {

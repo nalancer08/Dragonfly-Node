@@ -50,3 +50,7 @@
 		- token
 		- password
 	- Fixed MD5 hashed methods
+
+- Version 1.7.6
+	- Added first version of Authentication class, for tokens into the app
+	- And added the first route example for use the class
