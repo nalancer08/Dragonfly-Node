@@ -51,9 +51,55 @@ Authentication.prototype.requireToken = function(request, response) {
 		return false;
 	
 	} else {
+
 		app_clients[app_id].id = app_id;
 		return app_clients[app_id];
 	}
+}
+
+Authentication.prototype.requireTokenFrom = function(request, response, client) {
+
+	var obj = this,
+		server = require('../index').server,
+		app_clients = server.options.app_clients,
+		token = request.get('token', ''),
+		app_id = token.substr(token.lastIndexOf('.') + 1); // Extract app_id
+
+	if ( (typeof app_id === 'undefined') || app_id == '' || (typeof token === 'undefined') || token == '' || !obj.checkToken(app_id, token) ) {
+
+		//var ret = { status: 403, , result: 'error', message: "A valid App Token is required for accesing this API endpoint." };
+		response.setStatus(500);
+		response.respond();
+		return false;
+	
+	} else {
+
+		if (app_clients[app_id].key != client) {
+
+			//var ret = { status: 403, , result: 'error', message: "A valid App Toolbelt Token is required for accesing this API endpoint." };
+			response.setStatus(500);
+			response.respond();
+			return false;
+		}
+
+		app_clients[app_id].id = app_id;
+		return app_clients[app_id];
+	}
+}
+
+Authentication.prototype.requireTokenForToolBeltTransactions = function(request, response) {
+
+	this.requireTokenFrom(request, response, 'toolbelt');
+}
+
+Authentication.prototype.requireBearer = function(user_id, bearer) {
+
+	var obj = this,
+		server = require('../index').server,
+		check = server.hashToken(user_id),
+		ret = (bearer == check);
+
+	return ret;
 }
 
 module.exports = Authentication;
