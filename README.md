@@ -61,4 +61,13 @@
 
 - Version 1.8
 	- Added Tokenizr class
-		- With new static methods implementation 
+		- With new static methods implementation
+
+- Version 2.0
+	- No more handlers calls in at onRequest
+	- Route callback are called by static
+		- Functions must to have prototypes of parent endpoint class
+	- Can handle multiple endpoints
+		- Need to be added into index endpoints array
+	- Added function to match endpoint custom class with functions
+		- Check if relation between endpoints array and name class string have the requested string fuction

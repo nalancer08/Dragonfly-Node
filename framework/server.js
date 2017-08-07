@@ -99,9 +99,9 @@ Server.prototype.addRoute = function(method, route, handler, insert) {
 		method = method.toLowerCase(),
 		prev = (obj.options.base_url && obj.options.base_url != '' && obj.options.base_url != '/') ? obj.options.base_url : '',
 		instance = {
-		regexp: obj.routeToRegExp(prev + route),
-		handler: handler
-	};
+			regexp: obj.routeToRegExp(prev + route),
+			handler: handler
+		};
 	// Add the route, may be at the beginning or at the end
 	if (insert) { // Adding the route at the beginning of the route's array
 		obj.routes[method].unshift(instance);
@@ -126,8 +126,17 @@ Server.prototype.onRequest = function(req, res) {
 			// Try with the routes for the current method (get or post)
 			_.each(obj.routes[request.type], function(route) {
 				if ( request.path.match(route.regexp) ) {
-					isMatch = true;
-					handled = route.handler.call(obj, request, response);
+
+					var parts = route.handler.split('.'),
+						clazz = parts[0],
+						method = parts[1],
+						callback = obj.validateCallback(clazz, method);
+
+					if (callback && callback != undefined && callback != '') {
+
+						isMatch = true;
+						handled = callback(request, response, obj);
+					}
 				}
 			});
 
@@ -135,8 +144,17 @@ Server.prototype.onRequest = function(req, res) {
 			if (!handled) {
 				_.each(obj.routes["*"], function(route) {
 					if ( request.path.match(route.regexp) ) {
-						isMatch = true;
-						handled = route.handler.call(obj, request, response);
+
+						var parts = route.handler.split('.'),
+							clazz = parts[0],
+							method = parts[1],
+							callback = obj.validateCallback(clazz, method);
+
+						if (callback && callback != undefined && callback != '') {
+
+							isMatch = true;
+							handled = callback(request, response, obj);
+						}
 					}
 				});
 			}
@@ -175,6 +193,22 @@ Server.prototype.getDefaultRoute = function() {
 
 	return (prev + obj.defaultRoute);
 }
+
+Server.prototype.validateCallback = function(clazz, method) {
+
+	var obj = this,
+		endpoints = require('../index').endpoints;
+
+	if (endpoints[clazz] != undefined) {
+
+		clazz = endpoints[clazz];
+
+		if (typeof clazz[method] === 'function') {
+			return clazz[method];
+		}
+	}
+	return '';
+};
 
 Server.prototype.hashToken = function(value) {
 

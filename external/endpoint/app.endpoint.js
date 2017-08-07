@@ -8,22 +8,21 @@ function EndpointApp(server) {
 	var obj = this;
 	
 	/* Simple routes */
-	server.addRoute('*', '/status', this.status);
-	server.addRoute('get', '/testGet', this.test_uno);
-	server.addRoute('post', '/testPost', this.test_dos);
+	server.addRoute('*', '/status', 'EndpointApp.status');
+	server.addRoute('get', '/testGet', 'EndpointApp.test_uno');
+	server.addRoute('post', '/testPost', 'EndpointApp.test_dos');
 
 	/* Rest parameters routes */
-	server.addRoute('get', '/demo/:id', this.demo_uno);
-	server.addRoute('post', '/path/:id', this.demo_dos);
+	server.addRoute('get', '/demo/:id', 'EndpointApp.demo_uno');
+	server.addRoute('post', '/path/:id', 'EndpointApp.demo_dos');
 
 	/* Set the default route, in case to recive / in URL */
 	server.setDefaultRoute('/status');
 }
 
-EndpointApp.prototype.status = function(request, response, obj) {
+EndpointApp.prototype.status = function(request, response, server) {
 
 	var obj = this,
-		server = require('../../index').server,
 		authentication = require('../../index').authentication,
 		tokenizr = require('../../framework/tokenizr'),
 		ret = { status: 200, message: "Success", data: "Everything works!" };
@@ -49,7 +48,7 @@ EndpointApp.prototype.status = function(request, response, obj) {
 	}
 }
 
-EndpointApp.prototype.test_uno = function(request, response, obj) {
+EndpointApp.prototype.test_uno = function(request, response, server) {
 
 	var obj = this,
 		server = require('../../index').server,
@@ -61,14 +60,14 @@ EndpointApp.prototype.test_uno = function(request, response, obj) {
 	
 	ret.status = 200;
 	ret.message = 'Works fine!';
-	ret.data = 'NAme passed by GET: ' + name;
+	ret.data = 'Name passed by GET: ' + name;
 
 	response.setHeader('Content-Type', 'application/json');
 	response.setBody(JSON.stringify(ret));
 	response.respond();
 }
 
-EndpointApp.prototype.test_dos = function(request, response, obj) {
+EndpointApp.prototype.test_dos = function(request, response, server) {
 
 	var obj = this,
 		server = require('../../index').server,
@@ -86,7 +85,7 @@ EndpointApp.prototype.test_dos = function(request, response, obj) {
 	response.respond();
 }
 
-EndpointApp.prototype.demo_uno = function(request, response, obj) {
+EndpointApp.prototype.demo_uno = function(request, response, server) {
 
 	var obj = this,
 	server = require('../../index').server,
@@ -104,7 +103,7 @@ EndpointApp.prototype.demo_uno = function(request, response, obj) {
 	response.respond();
 }
 
-EndpointApp.prototype.demo_dos = function(request, response, obj) {
+EndpointApp.prototype.demo_dos = function(request, response, server) {
 
 	var obj = this,
 	server = require('../../index').server,

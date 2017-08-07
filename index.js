@@ -33,7 +33,7 @@ server.start();
 
 // Adding endpoints
 const endpoints = [];
-endpoints['app'] = new exports.EndpointApp(server);
+endpoints['EndpointApp'] = new exports.EndpointApp(server);
 
 // Exports
 module.exports = {
