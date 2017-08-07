@@ -58,3 +58,7 @@
 - Version 1.7.8
 	- Finish Authentication class
 	- Fix previus version
+
+- Version 1.8
+	- Added Tokenizr class
+		- With new static methods implementation 
