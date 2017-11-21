@@ -90,7 +90,7 @@ Authentication.prototype.requireToken = function(request, response) {
 		token = request.get('token', ''),
 		app_id = token.substr(token.lastIndexOf('.') + 1); // Extract app_id
 
-	if ( (typeof app_id === 'undefined')  app_id == '' || (typeof token === 'undefined') || token == '' || !obj.checkToken(app_id, token) ) {
+	if ( (typeof app_id === 'undefined') || app_id == '' || (typeof token === 'undefined') || token == '' || !obj.checkToken(app_id, token) ) {
 
 		//var ret = { status: 403, , result: 'error', message: "A valid App Token is required for accesing this API endpoint." };
 		response.setStatus(500);
@@ -113,7 +113,7 @@ Authentication.prototype.requireDynamicToken = function(request, response) {
 
 	if ( (typeof token === 'undefined') || token == '' || !obj.checkDynamicToken(token) ) {
 
-		var ret = { status: 500, , result: 'error', message: "Token expired" };
+		var ret = { status: 500, result: 'error', message: "Token expired" };
 		response.setStatus(500);
 		response.setHeader('Content-Type', 'application/json');
 		response.setBody(JSON.stringify(ret));
