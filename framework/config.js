@@ -16,24 +16,6 @@ const settings = {
 		'port': 8080,
 		'app_key': '00937ef9bfca40d1b6d16c13c3ca39bc',
 		'app_clients': {
-			'8b948989779e27ec69c584c98339bc49': {
-				'key': 'toolbelt',
-				'name': 'ToolBelt',
-				'requires': '1.0',
-				'permissions': [
-					'write',
-					'read'
-				]
-			},
-			'e6fda0f0d3e0adfff69e334462d1ef6a': {
-				'key': 'android',
-				'name': 'Android',
-				'requires': '1.0',
-				'permissions': [
-					'write',
-					'read'
-				]
-			},
 			'be72d1a7d3f0b1c52d95089056f202fe': {
 				'key': 'web',
 				'name': 'Web',
