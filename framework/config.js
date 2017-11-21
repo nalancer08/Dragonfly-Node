@@ -12,7 +12,7 @@ const settings = {
 	'development': {
 
 		'site_url': 'localhost',
-		'base_url': '/apis/api_name',
+		'base_url': '/appbuilders/apis/pigdata/umc',
 		'port': 8080,
 		'app_key': '00937ef9bfca40d1b6d16c13c3ca39bc',
 		'app_clients': {

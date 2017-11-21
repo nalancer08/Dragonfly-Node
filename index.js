@@ -21,6 +21,18 @@ const profile = require('./framework/config.js').profile;
 const settings = require('./framework/config.js').settings;
 const shared = settings['shared'];
 
+// Cassandra driver
+const cassandra = require('cassandra-driver');
+
+// Cassandra conecction
+const authProvider = new cassandra.auth.PlainTextAuthProvider('cassandra', 'qctCyRz2');
+const client = new cassandra.Client({ 
+	contactPoints: ['104.154.220.78'],
+	keyspace: 'umc',
+	authProvider: authProvider
+});
+client.connect(() => {});
+
 // Authentication
 const authentication = new exports.Authentication();
 
@@ -37,5 +49,5 @@ endpoints['EndpointApp'] = new exports.EndpointApp(server);
 
 // Exports
 module.exports = {
-  server, authentication ,endpoints
+  server, authentication, endpoints, client
 };

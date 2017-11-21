@@ -8,13 +8,19 @@ function EndpointApp(server) {
 	var obj = this;
 	
 	/* Simple routes */
-	server.addRoute('*', '/status', 'EndpointApp.status');
-	server.addRoute('get', '/testGet', 'EndpointApp.test_uno');
-	server.addRoute('post', '/testPost', 'EndpointApp.test_dos');
+	server.addRoute('*', '/status', 			'EndpointApp.status');
+	server.addRoute('*', '/token', 				'EndpointApp.token');
+
+	server.addRoute('*', '/user/new', 				'EndpointApp.newUser');
+	
+	server.addRoute('*', '/device/new', 				'EndpointApp.newDevice');
+
+	//server.addRoute('get', '/testGet', 'EndpointApp.test_uno');
+	//server.addRoute('post', '/testPost', 'EndpointApp.test_dos');
 
 	/* Rest parameters routes */
-	server.addRoute('get', '/demo/:id', 'EndpointApp.demo_uno');
-	server.addRoute('post', '/path/:id', 'EndpointApp.demo_dos');
+	//server.addRoute('get', '/demo/:id', 'EndpointApp.demo_uno');
+	//server.addRoute('post', '/path/:id', 'EndpointApp.demo_dos');
 
 	/* Set the default route, in case to recive / in URL */
 	server.setDefaultRoute('/status');
@@ -27,20 +33,61 @@ EndpointApp.prototype.status = function(request, response, server) {
 		tokenizr = require('../../framework/tokenizr'),
 		ret = { status: 200, message: "Success", data: "Everything works!" };
 
-	token = authentication.generateToken('be72d1a7d3f0b1c52d95089056f202fe');
-	console.log(token);
+	response.setHeader('Content-Type', 'application/json');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
+}
 
-	check = authentication.checkToken('be72d1a7d3f0b1c52d95089056f202fe', '7ab76f494cf1fd3dbda6152333a70bcc19e4dd04c6aa7df3b67cab4e22dd7dab.be72d1a7d3f0b1c52d95089056f202fe');
-	console.log(check);
-	/* Your logic here */
+EndpointApp.prototype.token = function(request, response, server) {
 
-	e = 'erick';
-	console.log(tokenizr.getToken(e));
+	var obj = this,
+		authentication = require('../../index').authentication,
+		tokenizr = require('../../framework/tokenizr'),
+		ret = { status: 500, message: "error" };
 
+	// TODO change this logic, to use, uniq information
+	var app_id = request.post('app_id');
+
+	// Generate token
+	var token = authentication.generateToken(app_id);
+	if (token != '') {
+		ret.status = 200;
+		ret.message = 'success';
+		ret.data = token;
+	} else {
+		ret.message = 'Application no valid';
+	}
+
+	// Return payload
+	response.setHeader('Content-Type', 'application/json');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
+}
+
+EndpointApp.prototype.newUser = function(request, response, server) {
+
+	var obj = this,
+		authentication = require('../../index').authentication,
+		tokenizr = require('../../framework/tokenizr'),
+		userClass = require('../../external/model/user.model.js');
+		ret = { status: 500, message: "error" };
 
 	if (authentication.requireToken(request, response)) {
 
-		ret.data = "Hello world!";
+		// Getting user information
+		var fbid = request.post('fbid'),
+			email = request.post('email'),
+			nicename = request.post('nicename');
+
+		var user = new userClass();
+		user.fbid = fbid;
+		user.email = email;
+		user.login = email;
+		user.nicename = nicename;
+		user.save();
+
+		ret.status = 200;
+		ret.message = "Successfully created";
 
 		response.setHeader('Content-Type', 'application/json');
 		response.setBody(JSON.stringify(ret));
@@ -48,13 +95,25 @@ EndpointApp.prototype.status = function(request, response, server) {
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 EndpointApp.prototype.test_uno = function(request, response, server) {
 
 	var obj = this,
 		server = require('../../index').server,
 		ret = { status: 500, message: "Error", data: [] };
 
-	var name = request.get('name', '');
+	var name = request.get('name', 'mundo');
 
 	/* Your logic here */
 	

@@ -45,7 +45,8 @@ Authentication.prototype.requireToken = function(request, response) {
 
 	if ( (typeof app_id === 'undefined') || app_id == '' || (typeof token === 'undefined') || token == '' || !obj.checkToken(app_id, token) ) {
 
-		//var ret = { status: 403, , result: 'error', message: "A valid App Token is required for accesing this API endpoint." };
+		var ret = { status: 500, result: 'error', message: "A valid App Token is required for accesing this API endpoint." };
+		response.setBody(JSON.stringify(ret));
 		response.setStatus(500);
 		response.respond();
 		return false;
