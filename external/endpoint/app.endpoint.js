@@ -30,9 +30,21 @@ EndpointApp.prototype.status = function(request, response, server) {
 	token = authentication.generateToken('be72d1a7d3f0b1c52d95089056f202fe');
 	console.log(token);
 
+	tokens = authentication.generateToken('be72d1a7d3f0b1c52d95089056f202fe');
+	console.log(tokens);
+
 	check = authentication.checkToken('be72d1a7d3f0b1c52d95089056f202fe', '7ab76f494cf1fd3dbda6152333a70bcc19e4dd04c6aa7df3b67cab4e22dd7dab.be72d1a7d3f0b1c52d95089056f202fe');
 	console.log(check);
 	/* Your logic here */
+
+	console.log("\n============ Dynamics tokens ==================");
+	dynamic = authentication.generateDynamicToken('be72d1a7d3f0b1c52d95089056f202fe');
+	console.log(dynamic);
+
+	dynamicc = authentication.generateDynamicToken('be72d1a7d3f0b1c52d95089056f202fe', 5);
+	console.log(dynamicc);
+
+	console.log("==================================================\n")
 
 	e = 'erick';
 	console.log(tokenizr.getToken(e));
