@@ -1,8 +1,9 @@
 /**
-	Version 1.1
+	Version 3.0
 	Created by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 06/08/2017
+	Revised by: nalancer08 <https://github.com/nalancer08>
 **/
+
 var crypto = require('crypto');
 
 function Tokenizr() {}
@@ -10,7 +11,7 @@ function Tokenizr() {}
 Tokenizr.getToken = function(data) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		key = server.security.token_salt,
 		hash = crypto.createHmac('sha256', key).update(data).digest('hex');
 
@@ -20,7 +21,7 @@ Tokenizr.getToken = function(data) {
 Tokenizr.checkToken = function(token) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		key = server.security.token_salt,
 		parts = token.split('.'),
 		data = (typeof parts[0] !== 'undefined' || parts[0] != '') ? parts[0] : '',
@@ -37,7 +38,7 @@ Tokenizr.checkToken = function(token) {
 Tokenizr.getData = function(token) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		key = server.security.token_salt,
 		parts = token.split('.'),
 		data = (typeof parts[0] !== 'undefined' || parts[0] != '') ? parts[0] : '';

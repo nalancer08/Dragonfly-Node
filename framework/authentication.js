@@ -1,8 +1,9 @@
 /**
-	Version 1.1
+	Version 3.0
 	Created by: nalancer08 <https://github.com/nalancer08>
 	Revision 1: 04/08/2017
 	Revision 2: 21/11/2017
+	Revision 3: 14/12/2017
 **/
 
 var _ = require('underscore');
@@ -10,7 +11,7 @@ var crypto = require('crypto');
 
 function Authentication() {}
 
-Authentication.prototype.generateToken = function(app_id) {
+Authentication.generateToken = function(app_id) {
 
 	var obj = this,
 		server = require('../index').server,
@@ -25,7 +26,7 @@ Authentication.prototype.generateToken = function(app_id) {
 	return ret;
 }
 
-Authentication.prototype.generateDynamicToken = function(app_id, time) {
+Authentication.generateDynamicToken = function(app_id, time) {
 
 	const moment = require('moment');
 	const jwt = require('jwt-simple');
@@ -51,7 +52,7 @@ Authentication.prototype.generateDynamicToken = function(app_id, time) {
 	return ret;
 }
 
-Authentication.prototype.checkToken = function(app_id, token) {
+Authentication.checkToken = function(app_id, token) {
 
 	var obj = this,
 		server = require('../index').server,
@@ -62,7 +63,7 @@ Authentication.prototype.checkToken = function(app_id, token) {
 	return ret;
 }
 
-Authentication.prototype.checkDynamicToken = function(token) {
+Authentication.checkDynamicToken = function(token) {
 
 	const moment = require('moment');
 	const jwt = require('jwt-simple');
@@ -82,7 +83,7 @@ Authentication.prototype.checkDynamicToken = function(token) {
 	return false;
 }
 
-Authentication.prototype.requireToken = function(request, response) {
+Authentication.requireToken = function(request, response) {
 
 	var obj = this,
 		server = require('../index').server,
@@ -104,7 +105,7 @@ Authentication.prototype.requireToken = function(request, response) {
 	}
 }
 
-Authentication.prototype.requireDynamicToken = function(request, response) {
+Authentication.requireDynamicToken = function(request, response) {
 
 	var obj = this,
 		server = require('../index').server,
@@ -128,7 +129,7 @@ Authentication.prototype.requireDynamicToken = function(request, response) {
 	}
 }
 
-Authentication.prototype.requireTokenFrom = function(request, response, client) {
+Authentication.requireTokenFrom = function(request, response, client) {
 
 	var obj = this,
 		server = require('../index').server,
@@ -158,12 +159,12 @@ Authentication.prototype.requireTokenFrom = function(request, response, client) 
 	}
 }
 
-Authentication.prototype.requireTokenForToolBeltTransactions = function(request, response) {
+Authentication.requireTokenForToolBeltTransactions = function(request, response) {
 
 	this.requireTokenFrom(request, response, 'toolbelt');
 }
 
-Authentication.prototype.requireBearer = function(user_id, bearer) {
+Authentication.requireBearer = function(user_id, bearer) {
 
 	var obj = this,
 		server = require('../index').server,

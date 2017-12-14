@@ -1,8 +1,7 @@
 /**
-	Version 1.6
-	Created by: biohzrd <https://github.com/biohzrd>
+	Version 3.0
+	Created by: nalancer08 <https://github.com/nalancer08>
 	Revised by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 25/07/2017
 **/
 
 var url = require('url');

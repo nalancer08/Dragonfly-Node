@@ -1,5 +1,5 @@
 /**
-	Version 1.6
+	Version 3.0
 	Created by: biohzrd <https://github.com/biohzrd>
 	Revised by: nalancer08 <https://github.com/nalancer08>
 	Last revision: 25/07/2017
@@ -7,34 +7,36 @@
 
 var _ = require('underscore');
 var http = require('http');
+var https = require('https');
 var url = require('url') ;
 var crypto = require('crypto');
+var fs = require('fs');
 
 var Request  = require('./request.js');
 var Response = require('./response.js');
+var Router = require('./router.js');
+var Functions = require('../external/functions.js');
 
-function Server(options, shared) {
+function Server(options) {
 
 	this.http = null;
 	this.verbose = true;
-	this.routes = {
-		"*": [],
-		"get": [],
-		"post": []
-	},
-	this.defaultRoute = '';
+	this.router = null;
+	this.functions = null;
 	// Call initialization callback
-	this.init(options, shared);
+	this.init(options);
 }
 
-Server.prototype.init = function(options, shared) {
+Server.prototype.init = function(options) {
 
-	var obj = this
-		opts = options || {},
-		security = shared || {};
+	var obj = this,
+		settings = options.settings,
+		opts = settings[options.profile] || {},
+		security = settings['shared'] || {};
 
 	_.defaults(opts, {
 		base_url: '',
+		site_url: '',
 		onNotFound: obj.onNotFound
 	});
 	obj.options = opts;
@@ -45,27 +47,55 @@ Server.prototype.init = function(options, shared) {
 	});
 	obj.security = security;
 
-	// Create the base HTTP server and bind the request handler
-	obj.http = http.createServer(function(req, res) {
-		// LOG
-		var hostname = req.headers.host; // hostname = 'localhost:8080'
-  		var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
-  		console.log('http://' + hostname + pathname);
+	// Cheking for http or https
+	if (/^((http):\/\/)/.test(obj.options.site_url) || /^((localhost))/.test(obj.options.site_url)) {
 
-		obj.onRequest.call(obj, req, res);
-	});
+		// Create the base HTTP server and bind the request handler
+		obj.http = http.createServer(function(req, res) {
+			// LOG
+			var hostname = req.headers.host; // hostname = 'localhost:8080'
+	  		var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
+	  		console.log('http://' + hostname + pathname);
+			obj.router.onRequest.call(obj.router, req, res);
+		});
+	} else if (/^((https):\/\/)/.test(obj.options.site_url)) {
+
+		// Setting options for https server
+		certs = {
+			key: fs.readFileSync('.external/certs/' + obj.security.key),
+			cert: fs.readFileSync('.external/certs/' + obj.security.cert)
+		};
+
+		// Creating HTTPS server
+		obj.http = https.createServer(certs, (req, res) => {
+			// LOG
+			var hostname = req.headers.host; // hostname = 'localhost:8080'
+	  		var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
+	  		console.log('https://' + hostname + pathname);
+			obj.router.onRequest.call(obj.router, req, res);
+		});
+	}
 	obj.onNotFound = opts.onNotFound;
+
+	// Initialize router
+	obj.router = new Router(obj);
+
+	// Setting endpoints
+	obj.functions = new Functions(obj);
 }
 
 Server.prototype.start = function() {
 
 	var obj = this;
 	var port = (obj.options.port && obj.options.port != '') ? obj.options.port : 8080;
+
 	// Listen on the specified port
 	obj.http.listen(port);
-	obj.log('Dragonfly Hyper server started');
-	obj.log(' > Listening on ' + obj.options.site_url + ':' + obj.options.port + obj.options.base_url);
-	//obj.log(' > Listening on port ' + port);
+
+	// Logging
+	obj.log('__________________  Dragonfly server started  ___________________');
+	obj.log(' >           Listening on ' + obj.options.site_url + ':' + obj.options.port + obj.options.base_url + '         < ');
+	obj.log('-----------------------------------------------------------------');
 }
 
 Server.prototype.log = function(value) {
@@ -76,139 +106,12 @@ Server.prototype.log = function(value) {
 	}
 }
 
-Server.prototype.routeToRegExp = function(route) {
-
-	var optionalParam = /\((.*?)\)/g,
-		namedParam    = /(\(\?)?:\w+/g,
-		splatParam    = /\*\w+/g,
-		escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-	// Convert route to regular expression, this was taken from Backbone's router
-	route = route.replace(escapeRegExp, '\\$&')
-			.replace(optionalParam, '(?:$1)?')
-			.replace(namedParam, function(match, optional) {
-			return optional ? match : '([^/?]+)';
-		})
-		.replace(splatParam, '([^?]*?)');
-	return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-}
-
-Server.prototype.addRoute = function(method, route, handler, insert) {
-
-	var obj = this,
-		insert = insert || false,
-		method = method.toLowerCase(),
-		prev = (obj.options.base_url && obj.options.base_url != '' && obj.options.base_url != '/') ? obj.options.base_url : '',
-		instance = {
-			regexp: obj.routeToRegExp(prev + route),
-			handler: handler
-		};
-	// Add the route, may be at the beginning or at the end
-	if (insert) { // Adding the route at the beginning of the route's array
-		obj.routes[method].unshift(instance);
-	} else { // Adding the route at the end of the route's array
-		obj.routes[method].push(instance);
-	}
-}
-
-Server.prototype.removeRoute = function(method, route) {
-	
-	// TBD
-}
-
-Server.prototype.onRequest = function(req, res) {
-
-	var obj = this;
-	var isMatch = false;
-	var response = new Response(res);
-	var request = new Request(req, {
-		onDataReceived: function() {
-
-			// Try with the routes for the current method (get or post)
-			_.each(obj.routes[request.type], function(route) {
-				if ( request.path.match(route.regexp) ) {
-
-					var parts = route.handler.split('.'),
-						clazz = parts[0],
-						method = parts[1],
-						callback = obj.validateCallback(clazz, method);
-
-					if (callback && callback != undefined && callback != '') {
-
-						isMatch = true;
-						handled = callback(request, response, obj);
-					}
-				}
-			});
-
-			// If not handled yet, try with the wildcard ones
-			if (!handled) {
-				_.each(obj.routes["*"], function(route) {
-					if ( request.path.match(route.regexp) ) {
-
-						var parts = route.handler.split('.'),
-							clazz = parts[0],
-							method = parts[1],
-							callback = obj.validateCallback(clazz, method);
-
-						if (callback && callback != undefined && callback != '') {
-
-							isMatch = true;
-							handled = callback(request, response, obj);
-						}
-					}
-				});
-			}
-
-			// Not handled? Well, at this point we call it 404
-			if (handled == false && isMatch == false ) {
-				obj.onNotFound(request, response);
-			}
-		}
-	}),
-	handled = false;
-	isMatch = false;
-}
-
 Server.prototype.onNotFound = function(request, response) {
 
 	response.setStatus(404);
 	response.respond(); // response.res.end();
 	//return true;
 }
-
-/**
-* This method allows to set the default route for the api
-* @param route: String name for the route
-**/
-Server.prototype.setDefaultRoute = function(route) {
-
-	var obj = this;
-	obj.defaultRoute = route;
-}
-
-Server.prototype.getDefaultRoute = function() {
-
-	var obj = this,
-		prev = (obj.options.base_url && obj.options.base_url != '' && obj.options.base_url != '/') ? obj.options.base_url : '';
-
-	return (prev + obj.defaultRoute);
-}
-
-Server.prototype.validateCallback = function(clazz, method) {
-
-	var obj = this,
-		endpoints = require('../index').endpoints;
-
-	if (endpoints[clazz] != undefined) {
-
-		clazz = endpoints[clazz];
-
-		if (typeof clazz[method] === 'function') {
-			return clazz[method];
-		}
-	}
-	return '';
-};
 
 Server.prototype.hashToken = function(value) {
 

@@ -1,12 +1,12 @@
 /**
 	Config file for manage the router and ports
-	Version 1.6
+	Version 3.0
 	Creatde by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 25/07/2017
+	Revision 1: 05/07/2017
+	Revision 2: 14/12/2017
 **/
 
 const profile = 'development';
-
 const settings = {
 
 	'development': {
@@ -42,10 +42,10 @@ const settings = {
 	'shared': {
 
 		'pass_salt': 'M0f4Ukm=}ob%5S)FTZP#.<G$1[fLkzT6d!G"B+iz.i"9p4M`8y0G9JS}TXfQX,6O',
-		'token_salt': '2f2J[SiwEV[PGI<9E4A0d&g-o$w~91cP_OjYcRb<[6EJbh!<0F7V*u?hQ^UF?hsY'
+		'token_salt': '2f2J[SiwEV[PGI<9E4A0d&g-o$w~91cP_OjYcRb<[6EJbh!<0F7V*u?hQ^UF?hsY',
+		'key': 'privkey.pem',
+		'cert': 'cert.pem'
 	}
 };
 
-module.exports = {
-  profile, settings
-};
+module.exports = { profile, settings };
