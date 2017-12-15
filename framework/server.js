@@ -62,8 +62,8 @@ Server.prototype.init = function(options) {
 
 		// Setting options for https server
 		certs = {
-			key: fs.readFileSync('.external/certs/' + obj.security.key),
-			cert: fs.readFileSync('.external/certs/' + obj.security.cert)
+			key: fs.readFileSync('./external/certs/' + obj.security.key),
+			cert: fs.readFileSync('./external/certs/' + obj.security.cert)
 		};
 
 		// Creating HTTPS server

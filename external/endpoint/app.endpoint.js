@@ -23,45 +23,17 @@ function EndpointApp(server) {
 EndpointApp.prototype.status = function(request, response, server) {
 
 	var obj = this,
-		//authentication = require('../../index').authentication,
-		tokenizr = require('../../framework/tokenizr'),
 		ret = { status: 200, message: "Success", data: "Everything works!" };
 
-	//token = authentication.generateToken('be72d1a7d3f0b1c52d95089056f202fe');
-	//console.log(token);
-
-	//check = authentication.checkToken('be72d1a7d3f0b1c52d95089056f202fe', token);
-	//console.log("Token integrity : " + check);
-	/* Your logic here */
-
-	console.log("\n============ Dynamics tokens ==================");
-
-	//dynamic = authentication.generateDynamicToken('be72d1a7d3f0b1c52d95089056f202fe');
-	//console.log(dynamic);
-
-	//c = authentication.checkDynamicToken(dynamic);
-	//console.log("Dynamic token integrity : " + c);
-
-	console.log("==================================================\n")
-
-	e = 'erick';
-	console.log(tokenizr.getToken(e));
-
-
-	//if (authentication.requireToken(request, response)) {
-
-		ret.data = "Hello world!";
-
-		response.setHeader('Content-Type', 'application/json');
-		response.setBody(JSON.stringify(ret));
-		response.respond();
-	//}
+	ret.data = "Hello world!";
+	response.setHeader('Content-Type', 'application/json');
+	response.setBody(JSON.stringify(ret));
+	response.respond();
 }
 
 EndpointApp.prototype.test_uno = function(request, response, server) {
 
 	var obj = this,
-		server = require('../../index').server,
 		ret = { status: 500, message: "Error", data: [] };
 
 	var name = request.get('name', 'mundo');
@@ -80,7 +52,6 @@ EndpointApp.prototype.test_uno = function(request, response, server) {
 EndpointApp.prototype.test_dos = function(request, response, server) {
 
 	var obj = this,
-		server = require('../../index').server,
 		ret = { status: 500, message: "Error", data: [] };
 
 	// Getting POST variables
@@ -98,7 +69,6 @@ EndpointApp.prototype.test_dos = function(request, response, server) {
 EndpointApp.prototype.demo_uno = function(request, response, server) {
 
 	var obj = this,
-	server = require('../../index').server,
 	ret = { status: 500, message: "Error", data: [] };
 
 	// Getting the id that comes from url as a rest variable
@@ -116,7 +86,6 @@ EndpointApp.prototype.demo_uno = function(request, response, server) {
 EndpointApp.prototype.demo_dos = function(request, response, server) {
 
 	var obj = this,
-	server = require('../../index').server,
 	ret = { status: 500, message: "Error", data: [] },
 	id = request.id, // Getting the id that comes from url as a rest variable
 	token = request.get('token'), // Getting GET variables
