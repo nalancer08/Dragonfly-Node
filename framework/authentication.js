@@ -4,6 +4,7 @@
 	Revision 1: 04/08/2017
 	Revision 2: 21/11/2017
 	Revision 3: 14/12/2017
+	Revision 4: 15/03/2018
 **/
 
 var _ = require('underscore');
@@ -14,7 +15,7 @@ function Authentication() {}
 Authentication.generateToken = function(app_id) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		app_key = server.options.app_key,
 		app_clients = server.options.app_clients;
 
@@ -32,7 +33,7 @@ Authentication.generateDynamicToken = function(app_id, time) {
 	const jwt = require('jwt-simple');
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		app_key = server.options.app_key,
 		app_clients = server.options.app_clients,
 		time = time || 1;
@@ -55,7 +56,7 @@ Authentication.generateDynamicToken = function(app_id, time) {
 Authentication.checkToken = function(app_id, token) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		app_clients = server.options.app_clients,
 		check = obj.generateToken(app_id),
 		ret = ( (check == token) && (typeof app_clients[app_id] !== 'undefined') ) ;
@@ -69,7 +70,7 @@ Authentication.checkDynamicToken = function(token) {
 	const jwt = require('jwt-simple');
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		app_key = server.options.app_key,
 		app_clients = server.options.app_clients;
 
@@ -86,7 +87,7 @@ Authentication.checkDynamicToken = function(token) {
 Authentication.requireToken = function(request, response) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		app_clients = server.options.app_clients,
 		token = request.get('token', ''),
 		app_id = token.substr(token.lastIndexOf('.') + 1); // Extract app_id
@@ -107,8 +108,12 @@ Authentication.requireToken = function(request, response) {
 
 Authentication.requireDynamicToken = function(request, response) {
 
+	const moment = require('moment');
+	const jwt = require('jwt-simple');
+
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
+		app_key = server.options.app_key,
 		app_clients = server.options.app_clients,
 		token = request.get('token', '');
 
@@ -124,15 +129,15 @@ Authentication.requireDynamicToken = function(request, response) {
 	} else {	
 		
 		payload = jwt.decode(token, app_key, 'HS512');
-		app_clients[payload.sub].id = app_id;
-		return app_clients[app_id];
+		app_clients[payload.sub].id = payload.sub;
+		return app_clients[payload.sub];
 	}
 }
 
 Authentication.requireTokenFrom = function(request, response, client) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		app_clients = server.options.app_clients,
 		token = request.get('token', ''),
 		app_id = token.substr(token.lastIndexOf('.') + 1); // Extract app_id
@@ -167,7 +172,7 @@ Authentication.requireTokenForToolBeltTransactions = function(request, response)
 Authentication.requireBearer = function(user_id, bearer) {
 
 	var obj = this,
-		server = require('../index').server,
+		server = global.app,
 		check = server.hashToken(user_id),
 		ret = (bearer == check);
 

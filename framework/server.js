@@ -43,7 +43,8 @@ Server.prototype.init = function(options) {
 
 	_.defaults(security, {
 		pass_salt: '1234567890',
-		token_salt: '0987654321'
+		token_salt: '0987654321',
+		version: '1.0'
 	});
 	obj.security = security;
 

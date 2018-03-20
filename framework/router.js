@@ -82,7 +82,7 @@ Router.prototype.onRequest = function(req, res) {
 					if (callback && callback != undefined && callback != '') {
 
 						isMatch = true;
-						handled = callback(request, response, obj);
+						handled = callback(request, response, obj.server);
 					}
 				}
 			});
@@ -100,7 +100,7 @@ Router.prototype.onRequest = function(req, res) {
 						if (callback && callback != undefined && callback != '') {
 
 							isMatch = true;
-							handled = callback(request, response, obj);
+							handled = callback(request, response, obj.server);
 						}
 					}
 				});

@@ -6,6 +6,10 @@
 
 function Functions(server) {
 
+	// Adding core classes
+	this.authentication = require('../framework/authentication.js');
+	this.tokenizr = require('../framework/tokenizr.js');
+
 	// Adding endpoints
 	EndpointApp = require('./endpoint/app.endpoint.js');
 

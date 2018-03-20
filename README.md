@@ -1,8 +1,16 @@
-# Dragonfly-Node-Hyper
- Dragonfly Node Hyper it's a framework to build APIS with NodeJS so simple, it's a incoplete project of biohzrd user, so we decided to taken and remastered
+<p align="center">
+  <img src="https://github.com/nalancer08/ABAIS/blob/master/logo.png">
+</p>
 
+# Dragonfly-Node
+ Dragonfly Node it's a framework to build APIS with NodeJS so simple
 
 ## Change Log
+
+- Revision 3.0.1
+	- Fixed Authentication class to use global app
+		- Fixed little bug for check dyanmic tokens
+	- Add performance into Router passing only server instance
 
 - Version 3.0
 	- Added support for https servers
