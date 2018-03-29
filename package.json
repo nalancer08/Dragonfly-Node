@@ -1,23 +1,24 @@
 {
-  "name": "dragonfly",
-  "version": "1.0.0",
-  "description": "APIs everywhere! Now with 100% more Node.js",
-  "homepage": "https://github.com/biohzrdmx/dragonfly-node",
+  "name": "DragonFly Node",
+  "version": "3.5.0",
+  "description": "Node.js framework to deploy APIS",
+  "homepage": "https://github.com/nalancer08/dragonfly-node",
   "keywords": [
     "server",
     "api"
   ],
-  "author": "biohzrdmx <http://github.com/biohzrdmx>",
+  "author": "biohzrdmx <http://github.com/nalancer08>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/biohzrdmx/dragonfly-node.git"
+    "url": "git://github.com/nalancer08/dragonfly-node.git"
   },
   "main": "index.js",
   "dependencies": {
     "blueimp-md5": "^2.8.0",
     "jwt-simple": "^0.5.0",
     "moment": "^2.15.2",
-    "underscore": ">= 1.6.x"
+    "underscore": ">= 1.6.x",
+    "websocket": "^1.0.25"
   },
   "scripts": {},
   "license": "MIT",

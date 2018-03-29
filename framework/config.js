@@ -1,6 +1,6 @@
 /**
 	Config file for manage the router and ports
-	Version 3.0
+	Version 3.5
 	Creatde by: nalancer08 <https://github.com/nalancer08>
 	Revision 1: 05/07/2017
 	Revision 2: 14/12/2017
@@ -14,6 +14,7 @@ const settings = {
 		'site_url': 'localhost',
 		'base_url': '/apis/api_name',
 		'port': 8080,
+		'wsServer': true,
 		'app_key': '00937ef9bfca40d1b6d16c13c3ca39bc',
 		'app_clients': {
 			'be72d1a7d3f0b1c52d95089056f202fe': {

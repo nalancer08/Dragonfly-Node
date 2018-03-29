@@ -1,5 +1,5 @@
 /**
-	Version 3.0
+	Version 3.5
 	Created by: nalancer08 <https://github.com/nalancer08>
 	Revision 1: 04/08/2017
 	Revision 2: 21/11/2017

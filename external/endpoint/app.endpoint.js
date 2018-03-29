@@ -1,6 +1,6 @@
 /**
 	Created by: nalancer08 <https://github.com/nalancer08>
-	Revision: 3.0
+	Revision: 3.5
 **/
 
 function EndpointApp(server) {
@@ -16,8 +16,33 @@ function EndpointApp(server) {
 	server.router.addRoute('get', '/demo/:id', 'EndpointApp.demo_uno');
 	server.router.addRoute('post', '/path/:id', 'EndpointApp.demo_dos');
 
+	// Adding websocket routes
+	server.wsRouter.addRoute('/papi', 'EndpointApp.sockets');
+
 	/* Set the default route, in case to recive / in URL */
 	server.router.setDefaultRoute('/status');
+}
+
+EndpointApp.prototype.sockets = function(request, socket, server) {
+
+	var connection = socket.accept(socket.origin);
+
+	//connection.send("Hello from WebService Socket");
+	console.log(request.get('name', '999'));
+	console.log(' Connection accepted from ' + connection.remoteAddress + ' - Protocol Version ' + connection.webSocketVersion);
+
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            if (message.utf8Data === 'reset\n') {
+                console.log((new Date()) + ' increment reset received');
+                number = 0;
+            }
+        }
+    });
+
+    connection.on('close', function(closeReason, description) {
+	        console.log(' Peer ' + connection.remoteAddress + ' disconnected, code: ' + closeReason + '.');
+	});
 }
 
 EndpointApp.prototype.status = function(request, response, server) {

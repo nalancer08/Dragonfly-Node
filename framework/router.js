@@ -1,5 +1,5 @@
 /**
-	Version 3.0
+	Version 3.5
 	Created by: nalancer08 <https://github.com/nalancer08>
 	Revised by: nalancer08 <https://github.com/nalancer08>
 **/
@@ -17,7 +17,7 @@ function Router(server) {
 		"*": [],
 		"get": [],
 		"post": []
-	},
+	};
 	this.defaultRoute = '';
 	this.server = server;
 }
@@ -64,7 +64,6 @@ Router.prototype.removeRoute = function(method, route) {
 Router.prototype.onRequest = function(req, res) {
 
 	var obj = this;
-
 	var isMatch = false;
 	var response = new Response(res);
 	var request = new Request(req, {
@@ -83,6 +82,7 @@ Router.prototype.onRequest = function(req, res) {
 
 						isMatch = true;
 						handled = callback(request, response, obj.server);
+						return;
 					}
 				}
 			});
@@ -90,6 +90,7 @@ Router.prototype.onRequest = function(req, res) {
 			// If not handled yet, try with the wildcard ones
 			if (!handled) {
 				_.each(obj.routes["*"], function(route) {
+
 					if ( request.path.match(route.regexp) ) {
 
 						var parts = route.handler.split('.'),
@@ -101,6 +102,7 @@ Router.prototype.onRequest = function(req, res) {
 
 							isMatch = true;
 							handled = callback(request, response, obj.server);
+							return;
 						}
 					}
 				});

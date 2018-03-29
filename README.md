@@ -7,6 +7,21 @@
 
 ## Change Log
 
+- Version 3.5
+	- Added WebSockets
+		- The socket service can added as a normal route
+		- Added WebSocketRouter to handle ws request
+		- Added support for httpx to handle get parameters
+		- Added variable into config file to manage wsServer as boolean
+		- Added only ws dump-incremental and lws-mirror protocols
+	- Added latets dependencies in package.json
+	- Changed header comments for version 3.5
+
+- Revision 3.1
+	- Refactor http object to handle http and https connectios to httpx
+	- Adding support in config file to hanlde WebSockets
+	- Into server class added logic to manage WebSocketServer
+
 - Revision 3.0.1
 	- Fixed Authentication class to use global app
 		- Fixed little bug for check dyanmic tokens

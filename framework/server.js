@@ -1,5 +1,5 @@
 /**
-	Version 3.0
+	Version 3.5
 	Created by: biohzrd <https://github.com/biohzrd>
 	Revised by: nalancer08 <https://github.com/nalancer08>
 	Last revision: 25/07/2017
@@ -16,6 +16,7 @@ var Request  = require('./request.js');
 var Response = require('./response.js');
 var Router = require('./router.js');
 var Functions = require('../external/functions.js');
+var WebSocketRouter = require('./WebSocketRouter.js');
 
 function Server(options) {
 
@@ -37,6 +38,7 @@ Server.prototype.init = function(options) {
 	_.defaults(opts, {
 		base_url: '',
 		site_url: '',
+		wsServer: false,
 		onNotFound: obj.onNotFound
 	});
 	obj.options = opts;
@@ -52,8 +54,8 @@ Server.prototype.init = function(options) {
 	if (/^((http):\/\/)/.test(obj.options.site_url) || /^((localhost))/.test(obj.options.site_url)) {
 
 		// Create the base HTTP server and bind the request handler
-		obj.http = http.createServer(function(req, res) {
-			// LOG
+		obj.httpx = http.createServer(function(req, res) {
+
 			var hostname = req.headers.host; // hostname = 'localhost:8080'
 	  		var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
 	  		console.log('http://' + hostname + pathname);
@@ -68,14 +70,24 @@ Server.prototype.init = function(options) {
 		};
 
 		// Creating HTTPS server
-		obj.http = https.createServer(certs, (req, res) => {
-			// LOG
+		obj.httpx = https.createServer(certs, (req, res) => {
 			var hostname = req.headers.host; // hostname = 'localhost:8080'
 	  		var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
 	  		console.log('https://' + hostname + pathname);
 			obj.router.onRequest.call(obj.router, req, res);
 		});
 	}
+
+	// Validate if exists WebServices permission
+	if (obj.options.wsServer) {
+
+		var WebSocketServer = require('websocket').server;
+		var wsServer = new WebSocketServer({ httpServer: obj.httpx });
+
+		var wsRouter = new WebSocketRouter(wsServer, obj);
+		obj.wsRouter = wsRouter;
+	}
+
 	obj.onNotFound = opts.onNotFound;
 
 	// Initialize router
@@ -91,7 +103,7 @@ Server.prototype.start = function() {
 	var port = (obj.options.port && obj.options.port != '') ? obj.options.port : 8080;
 
 	// Listen on the specified port
-	obj.http.listen(port);
+	obj.httpx.listen(port);
 
 	// Logging
 	obj.log('__________________  Dragonfly server started  ___________________');

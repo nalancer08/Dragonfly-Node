@@ -5,10 +5,10 @@
 //  \__,_/_/   \__,_/\__, /\____/_/ /_/_/ /_/\__, /
 //                  /____/                  /____/
 //
-// Starred by: biohzrd <https://github.com/biohzrd>
+// Starred by: nalancer08 <https://github.com/nalancer08>
 // Refactor by: nalancer08 <https://github.com/nalancer08> <erick.sanchez@appbuilders.com.mx>
 // Review by: nalancer08 <https://github.com/nalancer08> <erick.sanchez@appbuilders.com.mx>
-// Version 3.0
+// Version 3.5
 // Dragonfly Node
 //
 //
