@@ -1,9 +1,10 @@
 /**
+	Version 3.6
 	Config file for manage the router and ports
-	Version 3.5
 	Creatde by: nalancer08 <https://github.com/nalancer08>
 	Revision 1: 05/07/2017
 	Revision 2: 14/12/2017
+	Last revision: 03/10/2018
 **/
 
 const profile = 'development';
@@ -15,6 +16,15 @@ const settings = {
 		'base_url': '/apis/api_name',
 		'port': 8080,
 		'wsServer': true,
+		// Database settings
+		'database' : {
+
+			'db_driver' : 'none',
+			'db_host' : '',
+			'db_user' : '',
+			'db_pass' : '',
+			'db_name' : ''
+		},
 		'app_key': '00937ef9bfca40d1b6d16c13c3ca39bc',
 		'app_clients': {
 			'be72d1a7d3f0b1c52d95089056f202fe': {
@@ -40,7 +50,8 @@ const settings = {
 		'base_url': '/api/test/',
 		'port': 1234
 	},
-	'shared': {
+	'shared': {},
+	'security': {
 
 		'pass_salt': 'M0f4Ukm=}ob%5S)FTZP#.<G$1[fLkzT6d!G"B+iz.i"9p4M`8y0G9JS}TXfQX,6O',
 		'token_salt': '2f2J[SiwEV[PGI<9E4A0d&g-o$w~91cP_OjYcRb<[6EJbh!<0F7V*u?hQ^UF?hsY',

@@ -21,7 +21,6 @@ function Functions(server) {
 	this.endpoints['EndpointApp'] = new EndpointApp(server);
 
 	this.models = [];
-
 }
 
 module.exports = Functions;

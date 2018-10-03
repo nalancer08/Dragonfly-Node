@@ -1,8 +1,8 @@
 /**
-	Version 3.5
+	Version 3.6
 	Created by: biohzrd <https://github.com/biohzrd>
 	Revised by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 25/07/2017
+	Last revision: 03/10/2018
 **/
 
 var _ = require('underscore');
@@ -15,6 +15,7 @@ var fs = require('fs');
 var Request  = require('./request.js');
 var Response = require('./response.js');
 var Router = require('./router.js');
+var Database = require('./database.js');
 var Functions = require('../external/functions.js');
 var WebSocketRouter = require('./WebSocketRouter.js');
 
@@ -24,6 +25,8 @@ function Server(options) {
 	this.verbose = true;
 	this.router = null;
 	this.functions = null;
+	this.dbh = null;
+
 	// Call initialization callback
 	this.init(options);
 }
@@ -33,7 +36,8 @@ Server.prototype.init = function(options) {
 	var obj = this,
 		settings = options.settings,
 		opts = settings[options.profile] || {},
-		security = settings['shared'] || {};
+		shared = settings['shared'] || {},
+		security = settings['security'] || {};
 
 	_.defaults(opts, {
 		base_url: '',
@@ -92,6 +96,9 @@ Server.prototype.init = function(options) {
 
 	// Initialize router
 	obj.router = new Router(obj);
+
+	// Initialize database
+	obj.dbh = new Database(obj.options['database']);
 
 	// Setting endpoints
 	obj.functions = new Functions(obj);
@@ -174,6 +181,33 @@ Server.prototype.validateShaToken = function(token, value) {
 		check = obj.shaToken(value);
 
 	return (token == check);
+}
+
+Server.prototype.getDbh = function() {
+
+	var obj = this;
+	if (obj.dbh != null) {
+
+		return new Promise(function(resolve, reject) {
+			obj.dbh.dbh.getConnection(function(err, connection) {
+
+				if (err) {
+					reject(Error('No connection'));
+				} else if (connection) {
+					resolve(connection);
+				}
+			});
+		});
+
+	}
+}
+
+Server.prototype.getPoolDbh = function() {
+
+	var obj = this;
+	if (obj.dbh != null && obj.dbh.connection != undefined) {
+		return obj.dbh.connection;
+	}
 }
 
 module.exports = Server;

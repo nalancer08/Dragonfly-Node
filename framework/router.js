@@ -69,6 +69,11 @@ Router.prototype.onRequest = function(req, res) {
 	var request = new Request(req, {
 		onDataReceived: function() {
 
+			//console.log(request.path);
+			if (request.path == obj.server.options.base_url) {
+				request.path = obj.server.options.base_url + obj.defaultRoute;
+			}
+
 			// Try with the routes for the current method (get or post)
 			_.each(obj.routes[request.type], function(route) {
 				if ( request.path.match(route.regexp) ) {

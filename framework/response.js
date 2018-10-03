@@ -7,6 +7,7 @@
 var _ = require('underscore');
 
 function Response(res) {
+
 	this.res = null;
 	this.body = '';
 	this.status = 200;
@@ -17,21 +18,25 @@ function Response(res) {
 }
 
 Response.prototype.init = function(res) {
+
 	var obj = this;
 	obj.res = res;
 }
 
 Response.prototype.setBody = function(body) {
+
 	var obj = this;
 	obj.body = body;
 }
 
 Response.prototype.setStatus = function(status) {
+
 	var obj = this;
 	obj.status = status;
 }
 
 Response.prototype.setHeader = function(name, value) {
+
 	var obj = this;
 	obj.headers.push({
 		name: name,
@@ -40,16 +45,19 @@ Response.prototype.setHeader = function(name, value) {
 }
 
 Response.prototype.getBody = function() {
+
 	var obj = this;
 	return obj.body;
 }
 
 Response.prototype.getStatus = function() {
+
 	var obj = this;
 	return obj.status;
 }
 
 Response.prototype.getHeader = function(name) {
+	
 	var obj = this,
 		ret = null;
 	ret = _.find(obj.headers, function(header) {

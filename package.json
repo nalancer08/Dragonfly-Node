@@ -1,6 +1,6 @@
 {
   "name": "DragonFly Node",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Node.js framework to deploy APIS",
   "homepage": "https://github.com/nalancer08/dragonfly-node",
   "keywords": [

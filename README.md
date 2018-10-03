@@ -7,6 +7,13 @@
 
 ## Change Log
 
+- Version 3.6 [03/10/2018]
+	- Added database connection (class)
+	- Improve config file to handle database
+		- Change shared to only have API name
+		- Added security group with certs and salts
+	- Improve server class to use databse class
+
 - Version 3.5
 	- Added WebSockets
 		- The socket service can added as a normal route
