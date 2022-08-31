@@ -2,6 +2,7 @@
 	Version 3.5
 	Created by: nalancer08 <https://github.com/nalancer08>
 	Revised by: nalancer08 <https://github.com/nalancer08>
+	Revision 2: 31/08/2022
 **/
 
 var Request  = require('./request.js');
@@ -159,8 +160,7 @@ Router.prototype.getDefaultRoute = function() {
 Router.prototype.onNotFound = function(request, response) {
 
 	response.setStatus(404);
-	response.respond(); // response.res.end();
-	//return true;
+	response.respond();
 }
 
 module.exports = Router;

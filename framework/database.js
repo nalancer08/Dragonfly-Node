@@ -1,7 +1,8 @@
 /**
 	Version 3.6
 	Created by: nalancer08 <https://github.com/nalancer08>
-	Last revision: 03/10/2018
+	R1vison 1: 03/10/2018
+	Last revision: 31/08/2022
 **/
 
 class Database {
@@ -28,6 +29,15 @@ class Database {
 					});
 					this.creatMySqlConnection();
  					//this.dbh.connect();
+
+				break;
+
+				case 'mogodb':
+
+					var client = require('mongodb').MongoClient;
+					client.connect(settings.db_host, function(err. db) {
+						obj.dbh = db;
+					});
 
 				break;
 			}

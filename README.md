@@ -7,6 +7,13 @@
 
 ## Change Log
 
+- Version 4 [31/08/2022]
+	- Integration of MondoDB as default Database
+	- Request allos recieve JSON as body
+	- Fix router in 404 error
+
+## Change Log
+
 - Version 3.6 [03/10/2018]
 	- Added database connection (class)
 	- Improve config file to handle database

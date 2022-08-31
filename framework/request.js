@@ -2,6 +2,7 @@
 	Version 3.0
 	Created by: nalancer08 <https://github.com/nalancer08>
 	Revised by: nalancer08 <https://github.com/nalancer08>
+	Revision 2: 31/08/2022
 **/
 
 var url = require('url');
@@ -11,7 +12,8 @@ function Request(req, options) {
 
 	this.params = {
 		get: {},
-		post: {}
+		post: {},
+		body: ''
 	};
 	this.format = 'html';
 	this.type = 'get';
@@ -39,11 +41,7 @@ Request.prototype.init = function(req, options) {
 	// Parse path parts
 	obj.path = parsed.pathname.replace(/\/$/, ''); // This is important
 	obj.parts = parsed.pathname.replace(/(^\/|\/$)/, '').split('/');
-
-	// // Try to guess MVC parameters
-	// obj.controller = obj.parts[0] || '';
-	// obj.action = obj.parts[1] || '';
-	// obj.id = obj.parts[2] || '';
+	
 	obj.controller = 'app';
 	obj.action = obj.parts[0];
 	obj.id = obj.parts[1] || null;
@@ -55,28 +53,17 @@ Request.prototype.init = function(req, options) {
 		}
 	}
 
-	/*console.log("======= Start ========");
-	console.log(obj.action);
-	console.log(obj.path);
-	console.log("======= End ========");*/
-
 	// Patch for catch if not pass second parameter
 	if (obj.id == undefined || obj.id === 'undefined' || obj.id == null) {
 		obj.id = null;
 	}
 
-	/*console.log("======= Start ========");
-	console.log(obj.id);
-	console.log("======= End ========");*/
-
 	// Get output format (if specified)
-	//if (obj.id && obj.id != undefined && obj.id !== 'undefined') {
 	var matches = (obj.id == null) ? null : obj.id.match(/\.([a-z0-9]+)$/);
 	if (matches) {
 			obj.format = matches[1] || 'html';
 			obj.id = obj.id.replace(/\.([a-z0-9]+)$/, '');
 	}
-	//}
 
 	// Stream request body
 	req.on('data', function(chunk) {
@@ -86,6 +73,7 @@ Request.prototype.init = function(req, options) {
 	obj.params.get = parsed.query;
 	req.on('end', function(chunk) {
 		obj.params.post = querystring.parse(body);
+		obj.params.body = body;
 		obj.onDataReceived.call(obj);
 	});
 }
@@ -128,6 +116,12 @@ Request.prototype.get = function(name, value) {
 		ret = obj.params.get[name];
 	}
 	return ret;
+}
+
+Request.prototype.body = function(name, value) {
+
+	var obj = this;
+	return obj.params.body;
 }
 
 Request.prototype.onDataReceived = function() {

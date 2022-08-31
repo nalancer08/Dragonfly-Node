@@ -1,6 +1,6 @@
 {
   "name": "DragonFly Node",
-  "version": "3.6.0",
+  "version": "4.0.0",
   "description": "Node.js framework to deploy APIS",
   "homepage": "https://github.com/nalancer08/dragonfly-node",
   "keywords": [
@@ -16,6 +16,7 @@
   "dependencies": {
     "blueimp-md5": "^2.8.0",
     "jwt-simple": "^0.5.0",
+    "minimist": "^1.2.5",
     "moment": "^2.15.2",
     "underscore": ">= 1.6.x",
     "websocket": "^1.0.25"

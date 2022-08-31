@@ -4,10 +4,12 @@
 	Creatde by: nalancer08 <https://github.com/nalancer08>
 	Revision 1: 05/07/2017
 	Revision 2: 14/12/2017
-	Last revision: 03/10/2018
+	Revision 3: 03/10/2018
+	Last revision: 31/08/2022
 **/
 
-const profile = 'development';
+const argv = require('minimist')(process.argv.slice(2));
+const profile = argv.p || 'development';
 const settings = {
 
 	'development': {
@@ -15,11 +17,10 @@ const settings = {
 		'site_url': 'localhost',
 		'base_url': '/apis/api_name',
 		'port': 8080,
-		'wsServer': true,
-		// Database settings
+		'wsServer': false,
 		'database' : {
 
-			'db_driver' : 'none',
+			'db_driver' : 'mongodb',
 			'db_host' : '',
 			'db_user' : '',
 			'db_pass' : '',
@@ -37,20 +38,10 @@ const settings = {
 				]
 			}
 		}
+	}
+	'shared': {
+		'enviroment': profile
 	},
-	'testing': {
-
-		'site_url': 'localhost',
-		'base_url': '/',
-		'port': 8080
-	},
-	'production': {
-
-		'site_url': 'mydomain.com',
-		'base_url': '/api/test/',
-		'port': 1234
-	},
-	'shared': {},
 	'security': {
 
 		'pass_salt': 'M0f4Ukm=}ob%5S)FTZP#.<G$1[fLkzT6d!G"B+iz.i"9p4M`8y0G9JS}TXfQX,6O',
